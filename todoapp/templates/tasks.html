@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    {% extends 'base.html' %}
+
+
+
+    {% block content %}
+    <h1>Your Task List</h1>
+    <ul>
+        {% for task in uncompleted_tasks %}
+        <li>
+            <div class="task-item">
+                <span>{{ task }}</span>
+                <div class="task-buttons">
+                    <form action="{{ url_for('complete_task', task_id=loop.index0) }}" method="post" style="display:inline;">
+                        <button type="submit">Complete</button>
+                    </form>
+                    <form action="{{ url_for('delete_task', task_id=loop.index0) }}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <h2>Completed Tasks</h2>
+    <ul>
+        {% for task in completed_tasks %}
+        <li>
+            <div class="task-item">
+                <span class="completed-task">{{ task }}</span>
+                <div class="task-buttons">
+                    <form action="{{ url_for('delete_task', task_id=loop.index0 + uncompleted_tasks|length)}}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('index') }}">Back to Home</a>
+    {% endblock %}
+</body>
+</html>
